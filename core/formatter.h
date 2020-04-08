@@ -31,6 +31,7 @@ struct FmtOpts {
     bool stripEverything;
     bool prettyFieldNames;
     bool sortImports;
+    bool applyBrace;
     FmtOpts(void)
         : stringStyle('s'),
           commentStyle('s'),
@@ -42,7 +43,8 @@ struct FmtOpts {
           stripAllButComments(false),
           stripEverything(false),
           prettyFieldNames(true),
-          sortImports(true)
+          sortImports(true),
+          applyBrace(true)
     {
     }
 };

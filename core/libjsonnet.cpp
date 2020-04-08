@@ -402,6 +402,11 @@ void jsonnet_fmt_sort_imports(JsonnetVm *vm, int v)
     vm->fmtOpts.sortImports = v;
 }
 
+void jsonnet_fmt_apply_brace(JsonnetVm *vm, int v)
+{
+    vm->fmtOpts.applyBrace = v;
+}
+
 void jsonnet_max_trace(JsonnetVm *vm, unsigned v)
 {
     vm->maxTrace = v;

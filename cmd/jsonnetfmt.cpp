@@ -123,8 +123,8 @@ static ArgStatus process_args(int argc, const char **argv, JsonnetConfig *config
         } else if (arg == "--") {
             // All subsequent args are not options.
             while ((++i) < args.size())
-                remaining_args.push_back(args[i]);          
-            break;  
+                remaining_args.push_back(args[i]);
+            break;
         } else if (arg == "-i" || arg == "--in-place") {
             config->fmtInPlace = true;
         } else if (arg == "--test") {
@@ -186,6 +186,10 @@ static ArgStatus process_args(int argc, const char **argv, JsonnetConfig *config
             jsonnet_fmt_sort_imports(vm, true);
         } else if (arg == "--no-sort-imports") {
             jsonnet_fmt_sort_imports(vm, false);
+        } else if (arg == "--apply-brace") {
+            jsonnet_fmt_apply_brace(vm, true);
+        } else if (arg == "--no-apply-brace") {
+            jsonnet_fmt_apply_brace(vm, false);
         } else if (arg == "--debug-desugaring") {
             jsonnet_fmt_debug_desugaring(vm, true);
         } else if (arg.length() > 1 && arg[0] == '-') {

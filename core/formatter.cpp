@@ -894,6 +894,22 @@ class FixPlusObject : public FmtPass {
     }
 };
 
+/* Ensure ApplyBrace syntax sugar is never used. */
+class FixApplyBrace : public FmtPass {
+    using FmtPass::visit;
+
+   public:
+    FixApplyBrace(Allocator &alloc, const FmtOpts &opts) : FmtPass(alloc, opts) {}
+    void visitExpr(AST *&expr)
+    {
+        if (auto *apply_brace = dynamic_cast<ApplyBrace *>(expr)) {
+            expr = alloc.make<Binary>(
+                apply_brace->location, apply_brace->openFodder, apply_brace->left, Fodder(), BOP_PLUS, apply_brace->right);
+        }
+        FmtPass::visitExpr(expr);
+    }
+};
+
 /* Remove final colon in slices. */
 class NoRedundantSliceColon : public FmtPass {
     using FmtPass::visit;
@@ -2263,7 +2279,11 @@ std::string jsonnet_fmt(AST *ast, Fodder &final_fodder, const FmtOpts &opts)
     FixNewlines(alloc, opts).file(ast, final_fodder);
     FixTrailingCommas(alloc, opts).file(ast, final_fodder);
     FixParens(alloc, opts).file(ast, final_fodder);
-    FixPlusObject(alloc, opts).file(ast, final_fodder);
+    if (opts.applyBrace)
+        FixPlusObject(alloc, opts).file(ast, final_fodder);
+    else
+        FixApplyBrace(alloc, opts).file(ast, final_fodder);
+
     NoRedundantSliceColon(alloc, opts).file(ast, final_fodder);
     if (opts.stripComments)
         StripComments(alloc, opts).file(ast, final_fodder);
